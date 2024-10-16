@@ -147,3 +147,4 @@ surveys %>%
   summarize(mean_weight = mean(weight),
             min_weight = min(weight)) %>% 
   arrange(-mean_weight)
+
