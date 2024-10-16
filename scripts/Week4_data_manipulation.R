@@ -1,4 +1,4 @@
-#learning dplyr and tidyr: select, filter, and pipes ----
+#Learning dplyr and tidyr: select, filter, and pipes ----
 #only do this once ever:
 install.packages("tidyverse")
 #We've learned bracket subsetting
@@ -78,3 +78,72 @@ surveys
 #what happened here?
 
 ##line break rules: after open parenthesis, pipe,commas, or anything that shows the line is not complete yet ----
+
+library(tidyverse)
+surveys <- read_csv('data/portal_data_joined.csv')
+
+#Learn about mutate, group_by, and summarize functions ----
+## Mutate ----
+
+#create, modify and delete columns 
+surveys <- surveys %>% 
+  mutate(weight_kg = weight/1000)
+str(surveys)
+
+#add multiple columns inside mutate function
+surveys <- surveys %>% 
+  mutate(weight_kg = weight/1000, 
+         weight_kg2 = weight_kg*2)
+str(surveys)
+
+#filter out NAs
+surveys <- surveys %>% 
+  filter(!is.na(weight)) %>% 
+  mutate(weight_kg = weight/1000, 
+         weight_kg2 = weight_kg*2)
+str(surveys)
+head(surveys) #by default shows first 10 columns 
+
+#challenge in tutorial to combine skills 
+
+## Group_by and summarize ----
+#often used together 
+
+#group_by allows you to perform analysis on certain groups in data - requires some kind of categorical variable 
+surveys2 <- surveys %>% 
+  group_by(sex) %>% 
+  mutate(mean_weight = mean(weight,))
+str(surveys2)
+#we just want to know the weight by each group in the sex column - this is where summarize function is handy 
+
+surveys3 <- surveys %>% 
+  group_by(sex) %>% 
+  summarize(mean_weight = mean(weight,))
+
+surveys3
+
+#look at weight for multiple variables (sex and species ID)
+surveys3 <- surveys %>% 
+  group_by(sex, species_id) %>% 
+  summarize(mean_weight = mean(weight,))
+
+surveys3
+
+#use arrange function to look at weight values in a specific order 
+surveys %>% 
+  group_by(sex, species_id) %>% 
+  summarize(mean_weight = mean(weight,)) %>% 
+  arrange(mean_weight)
+#now the output is from lowest to highest weight 
+surveys %>% 
+  group_by(sex, species_id) %>% 
+  summarize(mean_weight = mean(weight,)) %>% 
+  arrange(-mean_weight)
+#add dash and now the values descend from highest value 
+
+#summarize multiple values 
+surveys %>% 
+  group_by(sex, species_id) %>% 
+  summarize(mean_weight = mean(weight),
+            min_weight = min(weight)) %>% 
+  arrange(-mean_weight)
