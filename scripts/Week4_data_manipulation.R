@@ -79,6 +79,23 @@ surveys
 
 ##line break rules: after open parenthesis, pipe,commas, or anything that shows the line is not complete yet ----
 
+#one final review of an important concept we learned last week
+#applied to the tidyverse
+
+mini <- surveys[190:209,]
+table(mini$species_id)
+#how many rows have a species ID that's either DM or NL?
+#how do we filter out the rows that match this condition? 
+nrow(mini)
+
+test <- mini %>% filter(species_id == c("DM", "NL"))
+nrow(test)
+
+#use %in% instead! whenever you're filtering for buckets of stuff think about how many rows you should be seeing 
+
+test <- mini %>% filter(species_id %in% c("DM", "NL"))
+nrow(test)
+
 library(tidyverse)
 surveys <- read_csv('data/portal_data_joined.csv')
 
@@ -96,6 +113,7 @@ surveys <- surveys %>%
          weight_kg2 = weight_kg*2)
 str(surveys)
 
+
 #filter out NAs
 surveys <- surveys %>% 
   filter(!is.na(weight)) %>% 
@@ -104,9 +122,13 @@ surveys <- surveys %>%
 str(surveys)
 head(surveys) #by default shows first 10 columns 
 
-#challenge in tutorial to combine skills 
+ave_weight <-surveys %>% 
+  filter(!is.na(weight)) %>% 
+  mutate(mean_weight=mean(weight))
 
-## Group_by and summarize ----
+#calling up comoplete cases will eliminate NAs anywhere in your dataframe, vs is.na will eliminate in the specific column you want to eliminate 
+
+## Group_by (group by specific column of data that is categorical in nature) and summarize ----
 #often used together 
 
 #group_by allows you to perform analysis on certain groups in data - requires some kind of categorical variable 
@@ -116,6 +138,7 @@ surveys2 <- surveys %>%
 str(surveys2)
 #we just want to know the weight by each group in the sex column - this is where summarize function is handy 
 
+#don't actually need to use mutate 
 surveys3 <- surveys %>% 
   group_by(sex) %>% 
   summarize(mean_weight = mean(weight,))
