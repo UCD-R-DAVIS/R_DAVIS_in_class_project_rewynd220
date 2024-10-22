@@ -33,3 +33,4 @@ surveys_avg_weight <- surveys %>%
 surveys_above_avg_weight <- surveys_avg_weight %>% 
   group_by(species_id,sex) %>% 
   mutate(above_average = weight>avg_weight)
+  #how do we know it will return true / false for this? 
