@@ -25,8 +25,19 @@ head(surveys_hindfoot_half)
 
 #What was the weight of the heaviest animal measured in each year? Return a table with three columns: year, weight of the heaviest animal in grams, and weight in kilograms, arranged (arrange()) in descending order, from heaviest to lightest. (This table should have 26 rows, one for each year)
 
+surveys <- read_csv("data/portal_data_joined.csv")
 
+D <- surveys %>% 
+  filter(!is.na(weight)) %>% 
+  mutate(weight_kg=weight/1000) %>% 
+  group_by(year) %>% 
+  summarise(max_weight_g=max(weight), max_weight_kg=max(weight)) %>% 
+  arrange(-max_weight_g)
 
-#Try out a new function, count(). Group the data by sex and pipe the grouped data into the count() function. How could you get the same result using group_by() and summarize()? Hint: see ?n.
+  
+  #Try out a new function, count(). Group the data by sex and pipe the grouped data into the count() function. How could you get the same result using group_by() and summarize()? Hint: see ?n.
 
-
+?count
+sex <- surveys %>% 
+  group_by(sex) %>% 
+  summarise(n=n()) #what does this mean? 
