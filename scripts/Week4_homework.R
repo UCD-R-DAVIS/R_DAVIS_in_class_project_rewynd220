@@ -21,8 +21,15 @@ surveys<- surveys %>%
   filter(!is.na(weight)) %>% 
   group_by(species_id,sex) %>% 
   mutate(avg_weight = mean(weight))
-  #why is this what worked? 
+  #why is it that this what worked and not group_by(sex)?
 
-surveys_avg_weight <- surveys
-  select(.data = species, sex, weight, avg_weight)
-  
+surveys_avg_weight <- surveys %>% 
+  select(species_id, sex, weight, avg_weight)
+  #why use select and not filter?   
+  #select is used specifically for columns, #filter is used for rows 
+
+#Take surveys_avg_weight and add a new column called above_average that contains logical values stating whether or not a row’s weight is above average for its species+sex combination (recall the new column we made for this tibble).
+
+surveys_above_avg_weight <- surveys_avg_weight %>% 
+  group_by(species_id,sex) %>% 
+  mutate(above_average = weight>avg_weight)
