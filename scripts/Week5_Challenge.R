@@ -11,3 +11,17 @@ iris %>%
     Petal.Length > 1.6 & Petal.Length < 5.1 ~ "medium",
     Petal.Length >=5.1 ~ "big"
   ))
+
+#Filter the data so that only species_id = NL,and call this surveysNL
+#Join the tail data to the surveysNL data (i.e. left join with surveysNL on the left). Name it surveysNL_tail_left. How many rows are there?
+
+surveys <- read_csv('data/portal_data_joined.csv')
+surveysNL <- filter(surveys, species_id == "NL")
+nrow(surveysNL)
+#1252 rows 
+
+#Join the surveysNL data to the tail data (i.e. right join with surveysNL on the left). Name it surveysNL_tail_right. How many rows are there?
+
+tail_surveysNL_left <- left_join(x=tail, y=surveysNL, by = 'record_id')
+nrow(surveysNL_tail_right)
+#34786 rows 
