@@ -8,17 +8,43 @@ head(weight_range, n=6)
 #Create a new tibble showing the maximum weight for each species + sex combination and name it biggest_critters. Sort the tibble to take a look at the biggest and smallest species + sex combinations. HINT: it’s easier to calculate max if there are no NAs in the dataframe…
 biggest_critters <- surveys %>% 
   filter(!is.na(weight)) %>% 
-  group_by(sex) %>% 
-  summarise(max(weight), min(weight)) 
-
+  group_by(species_id, sex) %>% 
+  summarise(max(weight), min(weight)) #or try summarise(max_weight = max(weight))
 
 #Try to figure out where the NA weights are concentrated in the data- is there a particular species, taxa, plot, or whatever, where there are lots of NA values? There isn’t necessarily a right or wrong answer here, but manipulate surveys a few different ways to explore this. Maybe use tally and arrange here.
 NA_weights <- surveys %>% 
   filter(is.na(weight)) %>% 
   group_by(taxa) %>% tally() %>% arrange (-n)
 
+# Sort the tibble to take a look at the biggest and 
+# smallest species + sex combinations.
+biggest_critters %>% arrange(max_weight) %>% head()
 
-#Take surveys, remove the rows where weight is NA and add a column that contains the average weight of each species+sex combination to the full surveys dataframe. Then get rid of all the columns except for species, sex, weight, and your new average weight column. Save this tibble as surveys_avg_weight.
+biggest_critters %>% arrange(desc(max_weight)) %>% head()
+# or arrange(-max_weight)
+
+#Take surveys, remove the rows where weight is NA and add a column that contains the average weight of each species+sex combination to the full surveys dataframe. 
+
+surveys %>% 
+  filter(is.na(weight)) %>% 
+  group_by(species) %>% 
+  tally() %>% 
+  arrange(desc(n))
+
+surveys %>% 
+  filter(is.na(weight)) %>% 
+  group_by(taxa) %>% 
+  tally() %>% 
+  arrange(desc(n))
+
+surveys %>% 
+  filter(is.na(weight)) %>% 
+  group_by(plot_id) %>% 
+  tally() %>% 
+  arrange(desc(n))
+
+
+#Then get rid of all the columns except for species, sex, weight, and your new average weight column. Save this tibble as surveys_avg_weight.
 
 surveys<- surveys %>% 
   filter(!is.na(weight)) %>% 
