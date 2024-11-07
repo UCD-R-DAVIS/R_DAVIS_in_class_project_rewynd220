@@ -163,3 +163,97 @@ names(cbPalette) <- levels(iris$Species)
 #we don't need all the colors in the palette because there are only 3 categories. 
 #We cut the vector length to 3 here
 cbPalette <- cbPalette[1:length(levels(iris$Species))]
+
+ggplot(iris, aes(x= Sepal.Length, y= Petal.Length, color = Species)) +
+  geom_point() + theme_classic() + 
+  ggtitle("Sepal and Petal Length of Three Iris Species") + 
+  scale_color_manual(values = cbPalette) + #inserted cbPalette 
+  xlab("Sepal Length in cm") + 
+  ylab("Petal Length in cm")
+
+##DIVERGING DISCRETE----
+#from RColorBrewer
+myiris <- iris %>% group_by(Species) %>% mutate(size = case_when(
+  Sepal.Length > 1.1* mean(Sepal.Length) ~ "very large",
+  Sepal.Length < 0.9 * mean(Sepal.Length) ~ "very small",
+  Sepal.Length < 0.94 * mean(Sepal.Length) ~ "small",
+  Sepal.Length > 1.06 * mean(Sepal.Length) ~ "large",
+  T ~ "average"
+  
+))
+myiris$size <- factor(myiris$size, levels = c(
+  "very small", "small", "average", "large", "very large"
+)) #manually setting levels 
+
+ggplot(myiris, aes(x= Petal.Width, y= Petal.Length, color = size)) +
+  geom_point(size = 2) + theme_gray() +
+  ggtitle("Diamond Quality by Cut") + 
+  scale_color_brewer(palette = "RdYlBu")
+
+#Paul Tol also has developed qualitative, sequential, and diverging colorblind palettes:
+#https://cran.r-project.org/web/packages/khroma/vignettes/tol.html
+#you can enter the hex codes in manually just like the cbPalette example above
+
+
+#also check out the turbo color palette!
+#https://docs.google.com/presentation/d/1Za8JHhvr2xD93V0bqfK--Y9GnWL1zUrtvxd_y9a2Wo8/edit?usp=sharing
+#https://blog.research.google/2019/08/turbo-improved-rainbow-colormap-for.html
+
+#to download it and use it in R, use this link
+#https://rdrr.io/github/jlmelville/vizier/man/turbo.html
+
+#Section 3: Non-visual representations ####
+#Braille package
+
+#Section 4: Publishing Plots and Saving Figures & Plots ####
+install.packages(cowplot)
+library(cowplot)
+#you can print multiple plots together, 
+#which is helpful for publications
+# make a few plots:
+
+plot.diamonds <- ggplot(diamonds, aes(clarity, fill = cut)) + 
+  geom_bar() +
+  theme(axis.text.x = element_text(angle=70, vjust=0.5))
+#plot.diamonds
+
+plot.cars <- ggplot(mpg, aes(x = cty, y = hwy, colour = factor(cyl))) + 
+  geom_point(size = 2.5)
+#plot.cars
+
+plot.iris <- ggplot(data=iris, aes(x=Sepal.Length, y=Petal.Length, fill=Species)) +
+  geom_point(size=3, alpha=0.7, shape=21)
+#plot.iris
+
+# use plot_grid #linking plots together 
+panel_plot <- plot_grid(plot.cars, plot.iris, plot.diamonds, 
+                        labels=c("A", "B", "C"), ncol=2, nrow = 2)
+
+panel_plot
+
+#you can fix the sizes for more control over the result #ggdraw function
+fixed_gridplot <- ggdraw() + draw_plot(plot.iris, x = 0, y = 0, width = 1, height = 0.5) +
+  draw_plot(plot.cars, x=0, y=.5, width=0.5, height = 0.5) +
+  draw_plot(plot.diamonds, x=0.5, y=0.5, width=0.5, height = 0.5) + 
+  draw_plot_label(label = c("A","B","C"), x = c(0, 0.5, 0), y = c(1, 1, 0.5))
+
+fixed_gridplot
+
+#saving figures----
+
+ggsave("figures/gridplot.png", fixed_gridplot)
+#you can save images as .png, .jpeg, .tiff, .pdf, .bmp, or .svg
+
+#for publications, use dpi of at least 700
+ggsave("figures/gridplot.png", fixed_gridplot, 
+       width = 6, height = 4, units = "in", dpi = 700)
+
+#interactive web applications
+installed.packages(plotly)
+library(plotly)
+
+plot.iris <- ggplot(data=iris, aes(x=Sepal.Length, y=Petal.Length, 
+                                   fill=Species)) +
+  geom_point(size=3, alpha=0.7, shape=21)
+
+plotly::ggplotly(plot.iris)
