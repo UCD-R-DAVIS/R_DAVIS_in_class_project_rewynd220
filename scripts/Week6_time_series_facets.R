@@ -34,9 +34,13 @@ ggplot(data = yearly_counts, mapping = aes(x = year, y = n)) +
   facet_wrap(~ species_id) #facet call (similar one that is called facet grid) - species id is the third variable - show it by making each value a separate color OR show separate graphs for each species  #map panels across species (I could do this?) #species id value becomes title of each panel 
 
 #if you want to filter only a few species IDS
-ggplot(data = yearly_counts [yearly_counts$species_id%in%c('BA','DM','DO','DS')], mapping = aes(x = year, y = n)) +
+
+ggplot(data = yearly_counts[yearly_counts$species_id%in%c('BA','DM','DO','DS'),],
+       mapping = aes(x = year, y = n,group = species_id)) + 
   geom_line() +
-  facet_wrap(~ species_id)
+  facet_wrap(~species_id) +
+  scale_y_continuous(name = 'obs',breaks = seq(0,600,100)) +
+  theme()
 
 #when you call facet wrap by default it keeps the scale the same for every panel 
 
@@ -75,6 +79,7 @@ library(tigris) #?
 install.packages('tigris')
 library(sf) #?
 install.packages('sf')
+install.packages('ca_counties')
 
 #making maps 
 
@@ -82,3 +87,14 @@ ca_counties = tigris :: counties (state = 'CA', class = 'sf')
 
 ca_counties
 ggplot(data = ca_counties) + geom_sf()+ theme_map
+
+install.packages('ggthemes')
+library(ggthemes)
+library(tigris)
+library(sf)
+ca_counties = tigris::counties(state = 'CA',class='sf',year = 2024)
+tigris::block_groups(state = 'CA',year = 2012)
+ca_counties
+ggplot(data=ca_counties) + 
+  geom_sf(aes(fill = -ALAND)) + theme_map() +
+  scale_fill_continuous_tableau()
