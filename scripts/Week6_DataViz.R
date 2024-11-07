@@ -20,7 +20,7 @@ surveys_complete <- read_csv("data/portal_data_joined.csv") %>%
 
 #go to ggplot2 help to access website / cheat sheet 
 
-#example 
+#example ----
 ggplot(data = surveys_complete)
 
 #add aes argument 
@@ -51,7 +51,7 @@ ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length)) 
   geom_point(aes(color = genus)) +
   geom_smooth (aes(color=genus)) #represent the relationship b/w hindfoot length and weight for each group - this plost line per genus 
 
-#make it more streamlined #universal plot settings 
+#make it more streamlined #universal plot settings ----
 ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length, color = genus)) + #putting it up here makes it so all following actions are by genus 
   geom_point() +
   geom_smooth ()
@@ -69,9 +69,19 @@ surveys_wt_cat <- surveys %>%
 
 table(surveys_wt_cat$weight_cat)
 
-#boxplots: categorical & continuous data 
+#boxplots: categorical & continuous data ----
 ggplot(data = surveys_complete, mapping = aes(x=species_id, y = weight))+
-  geom_boxplot(color = "orange")
+  geom_boxplot(color = "orange") #giving spread of weight for each species id (look up geom_boxplot for details)
+
+ggplot(data = surveys_complete, mapping = aes(x=species_id, y = weight))+
+  geom_boxplot(fill = "orange") + #make insides orange, not just outline 
+  geom_jitter(color = "black", alpha = 0.1) #slight variation in how points are displayed on graph so you can visually see all the points that are there #alpha adds transparency 
+
+#change order of how plot is constructed so we can see the boxes #simply reverse order of how it's written 
+ggplot(data = surveys_complete, mapping = aes(x=species_id, y = weight))+
+  geom_jitter(color = "black", alpha = 0.1) +
+  geom_boxplot(fill = "orange", alpha = 0.7) 
+
 
 #for surveys_wt_cat example boxplot 
 ggplot(data=surveys_wt_cat, aes(x=weight_cat, y= hindfoot_length))+

@@ -70,3 +70,15 @@ ggplot(data = yearly_counts, mapping = aes(x = year, y = n)) +
 theme_economist
 
 library(ggthemes)
+
+library(tigris) #?
+install.packages('tigris')
+library(sf) #?
+install.packages('sf')
+
+#making maps 
+
+ca_counties = tigris :: counties (state = 'CA', class = 'sf')
+
+ca_counties
+ggplot(data = ca_counties) + geom_sf()+ theme_map
