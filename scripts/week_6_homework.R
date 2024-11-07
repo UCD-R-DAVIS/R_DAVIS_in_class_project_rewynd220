@@ -26,7 +26,7 @@ gapminder %>%
   count(country,lifeExp) %>% 
   ggplot(mapping = aes(x = country, y= lifeExp))+
   geom_jitter()+
-  geom_boxplot()+
+  geom_boxplot(alpha = 0.3)+
   xlab("Country") + ylab("Life Expectancy") #change axis labels 
 
                
