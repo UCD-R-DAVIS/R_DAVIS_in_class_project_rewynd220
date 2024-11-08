@@ -1,3 +1,7 @@
+#notes 
+#bracket & and | statements in parentheses (R thinks of & as multiply and | as addition) it will calculate & before | unless put in parentheses 
+#() and {} are the same thing 
+
 library(tidyverse)
 library(ggplot2)
 
@@ -29,6 +33,8 @@ ggplot(data = diamonds, aes(x= carat, y= price, color=clarity)) + #clarity is a 
 #reduce colors and special effects unless it has specific purpose #if we have carat on x axis we don't also want to assing colors to carats b/c that is redundant use of the data 
 #remove bolding, lighten labels, remove lines, direct label
 
+#one plot, one purpose - similar to one paragraph one function 
+
 #Now I've removed the background to clean up the plot
 #As we learned last week, there are other themes besides classic. Play around!
 ggplot(diamonds, aes(x= carat, y= price, color=clarity)) +
@@ -48,9 +54,9 @@ ggplot(diamonds, aes(x= carat, y= price, color=clarity)) +
 ggplot(diamonds, aes(x= carat, y= price, color=clarity)) +
   geom_point(alpha = 0.2) + theme_classic() + 
   ggtitle("Price by Diamond Quality") + ylab("price in $") + 
-  stat_smooth(method = "lm") #lm = linear regression, difference b/w stat_smooth and geom smooth? 
+  stat_smooth(method = "lm") #lm = linear model (linear regression), difference b/w stat_smooth and geom smooth? 
 
-#Now I've instead added LOESS trendcurves for each color (can be more accurate than lm)
+#Now I've instead added LOESS trendcurves for each color (can be more accurate than lm) #you can make LOESS curves more or less sensitive 
 ggplot(diamonds, aes(x= carat, y= price, color=clarity)) +
   geom_point(alpha = 0.2) + theme_classic() + 
   ggtitle("Price by Diamond Quality") + ylab("price in $") + 
@@ -67,6 +73,8 @@ ggplot(diamonds, aes(x= carat, y= price, color=clarity)) +
 #I use the colorpalette knowledge I learned from R-DAVIS every time I make a plot,
 #and it's not an exaggeration to say that it changed my life!
 #Here are some templates that you may use and edit in your own work.
+
+#Jet vs Turbo - Turbo much more uniform 
 
 #There are four types of palettes: 
 #1: continuous
@@ -128,7 +136,7 @@ ggplot(diamonds, aes(x = clarity, fill = cut)) +
 ggplot(diamonds, aes(x= cut, y= carat, fill = color)) +
   geom_boxplot() + theme_classic() + 
   ggtitle("Diamond Quality by Cut") + 
-  scale_fill_brewer(palette = "PuRd") #look at list of options from earlier / below
+  scale_fill_brewer(palette = "PuRd") #instead of scale_fill_viridis we use scale_fill_brewer - look at list of options from earlier / below
 #how did we know the name of the palette is "PuRd"? From this list:
 display.brewer.all(colorblindFriendly = TRUE)
 
@@ -206,7 +214,6 @@ ggplot(myiris, aes(x= Petal.Width, y= Petal.Length, color = size)) +
 #Braille package
 
 #Section 4: Publishing Plots and Saving Figures & Plots ####
-install.packages(cowplot)
 library(cowplot)
 #you can print multiple plots together, 
 #which is helpful for publications
@@ -241,11 +248,11 @@ fixed_gridplot
 
 #saving figures----
 
-ggsave("figures/gridplot.png", fixed_gridplot)
+ggsave("data_output/gridplot.png", fixed_gridplot) #always use ggsave instead of save image so you can make edits 
 #you can save images as .png, .jpeg, .tiff, .pdf, .bmp, or .svg
 
 #for publications, use dpi of at least 700
-ggsave("figures/gridplot.png", fixed_gridplot, 
+ggsave("data_output/gridplot.png", fixed_gridplot, 
        width = 6, height = 4, units = "in", dpi = 700)
 
 #interactive web applications

@@ -4,7 +4,7 @@ library(ggplot2)
 #First calculates mean life expectancy on each continent. Then create a plot that shows how life expectancy has changed over time in each continent. Try to do this all in one step using pipes! (aka, try not to create intermediate dataframes)
 
 new_gap <- gapminder %>% 
-  group_by(continent,year) %>% 
+  group_by(continent, year) %>% 
   summarise(avg_life_expectancy = mean(lifeExp))
 #didn't work to plot without using intermediate dataframes 
 ggplot(data = new_gap, mapping = aes( x = year, y = avg_life_expectancy, color = continent))+
@@ -28,5 +28,9 @@ gapminder %>%
   geom_jitter()+
   geom_boxplot(alpha = 0.3)+
   xlab("Country") + ylab("Life Expectancy") #change axis labels 
+
+
+#also can write like this 
+ggplot(data=gapminder[gapminder$country %in% c("Brazil", "China", "El Salvador", "Niger","United States"),] #put comma after column before bracket ends because it's taking x and y values from a vector (i think)
 
                
