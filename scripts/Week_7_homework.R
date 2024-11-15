@@ -33,6 +33,12 @@ ggplot(data = filter_gapminder_2, mapping = aes(x = fct_reorder(country, pop_dif
   scale_fill_brewer(palette = "Set2")+
   scale_fill_discrete(guide = "none") #remove legend for fill 
 
+# coord_flip function will invert the axes at the end to make it easier to read if needed 
+
+# if you put theme later than custom graph manipulations the theme will overwrite everything 
+
+#geom bar and geom col 
+#geom bar just wants one input, geom col can take two different values coming in (although there are workarounds)
 
 #ggplot(diamonds, aes(x = clarity, fill = cut)) + 
 #geom_bar() +

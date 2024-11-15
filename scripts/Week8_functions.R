@@ -67,6 +67,8 @@ f_to_k <- function(tempF){
  return(k)
 }
 
+#return retains all the values that the function is creating 
+
 #this sets us up well for iteration - helpful to create internal object and specify return of the object
 #the object K is pass-by-values - it only stays in function, doesn't go into global environment 
 
@@ -81,7 +83,9 @@ farenheit <- f_to_k( tempF = 72)
 
 # source()ing functions ---------------------------------------------------
 
+#when you have a bunch of functions you're working with, put it in it's own script, and call it into function you're working with (save function as it's own script, and call into the other script you're working in) #looking into this more 
 
+source('scripts/practice function.R')
 
 
 
@@ -102,7 +106,8 @@ gapminder %>%
 #generalize code (For other countries and other year ranges) 
 #change specific country & range of years 
 
-avgGDP<- function(cntry, yr.range){gapminder %>% 
+avgGDP<- function(cntry, yr.range){
+  gapminder %>% 
     filter(country == cntry, year %in% c(yr.range)) %>% 
     summarize(meanGDP = mean(gdpPercap, na.rm = TRUE))
   }
@@ -123,3 +128,25 @@ avgGDP<- function(cntry, yr.range){
 
 # Challenge ---------------------------------------------------------------
 # Write a new function that takes two arguments, the gapminder data.frame (d) and the name of a country (e.g. "Afghanistan"), and plots a time series of the country’s population. The return value from the function should be a ggplot object. Note: It is often easier to modify existing code than to start from scratch. To start out with one plot for a particular country, figured out what you need to change for each iteration (these will be your arguments), and then wrap it in a function.
+
+library(ggplot2)
+gapminder <- read_csv("https://ucd-r-davis.github.io/R-DAVIS/data/gapminder.csv") 
+
+country_plot <- function(cntry) {
+country_pop <- gapminder %>% 
+  select(country, year, pop) %>% 
+  filter(country == cntry) %>% #change this to interchange later 
+  group_by(year, pop) 
+  ggplot(data= country_pop, mapping = aes(x=year, y=pop))+
+  geom_line()+
+  labs(title = cntry)+
+    theme(
+      plot.title = element_text(hjust = 0.5)
+    )
+}
+
+country_plot("Australia")
+
+
+
+
