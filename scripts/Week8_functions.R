@@ -79,7 +79,17 @@ f_to_k <- function(tempF){
 
 farenheit <- f_to_k( tempF = 72)
 
+#Challenge ----
+#Write a function called K_to_C that takes a temperature in K and returns that temperature in C
+#Hint: To convert from K to C you subtract 273.15
+#Create a new R script, copy F_to_K and K_to_C in it, and save it as functions.R in the code directory of your project
 
+K_to_C <- function(tempK){
+  C <- (tempK - 273.5) 
+  return(C)
+}
+
+K_to_C(tempK = 414)
 
 # source()ing functions ---------------------------------------------------
 
