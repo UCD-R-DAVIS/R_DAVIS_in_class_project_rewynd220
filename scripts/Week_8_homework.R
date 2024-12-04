@@ -50,8 +50,15 @@ mloa2 = mloa %>%
                                   hour24, ":", 
                                   min), 
                            tz = "UTC")) %>%
-  # Convert to local time
+  #Convert to local time
   mutate(datetimeLocal = with_tz(datetime, tz = "Pacific/Honolulu"))
+
+# if you use paste it automatically puts spaces 
+#if you use paste0 it removes the spaces and puts dashes 
+#you can specify "sep" at the end (means seperator) sep = '-'
+#another way to do it: 
+mloa2 %>% mutate(datetime = ymd_hm(paste(year,month,day,sep='-'), paste(hour24, min, sep=':')))
+
 
 #Then, use dplyr to calculate the mean hourly temperature each month using the temp_C_2m column and the datetimeLocal columns. (HINT: Look at the lubridate functions called month() and hour()).
 
@@ -67,11 +74,13 @@ mloa_summaraize <- mloa_clean_date_time %>%
   # Calculate mean temperature
   summarize(meantemp = mean(temp_C_2m)) 
 
+#summarize collapses the data table into the means you ask for, mutate returns a mean for every value (I think)
+
 
 
 #Finally, make a ggplot scatterplot of the mean monthly temperature, with points colored by local hour.
 ggplot(data = mloa_summaraize, mapping = aes(x = localMon, y = meantemp)) + 
-  geom_point(aes(color = localHour))+
+  geom_point(aes(color = localHour))+ #defaults to continuous color scheme when you put in numbers 
   scale_color_viridis_c(labs(title = "Local Hour")) +
   # Label axes, add a theme
   xlab("Month") +
